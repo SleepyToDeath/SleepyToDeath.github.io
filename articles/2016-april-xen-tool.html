@@ -1,0 +1,45 @@
+<h2>How to get xen-tools run</h2>
+
+<table width="800">
+<tr>
+<td>
+<font size="4">
+<strong>xen-tools</strong> is a convenient tool for creating xen guests. If you use all xen 
+related packages from your distro's official repo, probably you won't get into 
+any trouble.  </p>
+
+<p><strong>But</strong>, chances are that you want to build a specific version of xen. Then 
+xen-tools may not work for you as expected. Here are some troubles I myself 
+ran into and how I solved them.  </p>
+
+<ol>
+<li>Version numbers of xen and xen-tools must match. You can't use xen-tools 
+4.4 on xen 4.5 since the interface may change with the development progress. 
+I guess the extra version number doesn't matter. I ran xen-tools 4.5 on xen 
+4.5.1 smoothly.  </li>
+<li>Even if you've installed the proper version of xen-tools, you may still 
+get an error like "ERROR:  Can't find version 4.5 of xen utils, bailing out!" 
+That's because xen-tools can't find the directory of your xen files. In my 
+debian jessie system, the message was produce by a bash script: 
+"/usr/lib/xen-common/bin/xen-dir" 
+It searches /usr/lib/xen-x.x for xen files. If you used the default configure 
+when compiling xen, the script would probably put everything into "/usr/local" 
+So, the simple solution is: delete everything in "xen-dir" script and put only 
+one line of code there: "echo /usr/local". If you don't like the dirty way, 
+you may google "compile xen from source" and change the configuration 
+following those instrucitons.   </li>
+<li>If you still get a stupid error like "ERROR:  Toolstack not specifed and 
+nothing detected, bailing out!", that's because a script is trying to search 
+for xl in "bin" directory, which is actually located in "sbin" in some distros. 
+The specific script is "/usr/lib/xen-common/bin/xen-toolstack". 
+You know how to fix it. 
+</li>
+</ol>
+</font>
+</tr>
+</td>
+</table>
+
+<br><br>
+<a href="../index.html"><font color="black">Blog Top</font></a>
+<br><br>

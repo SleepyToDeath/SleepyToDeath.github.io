@@ -1,0 +1,71 @@
+<h2>How to debug xen in qemu</h2>
+
+<table width="800">
+<tr>
+<td>
+<font size="4">
+If by any chance you became a pathetic system software developer (like me), debugging may have been a torture
+ for you, especially when your system doesn't even give you a chance to view its printk message before crashing.
+<br><br>
+For common operating systems, running in qemu is a good choice if you don't wanna be bothered with the serial
+console stuff. But I guess few people ever imagined running a hypervisor (e.g xen) in qemu. The only article 
+I found trying to do so failed starting any guests. Considering the convenience this could bring, I tried to 
+build such an debugging environment and resulted in a success (with xen). So, I'm recording my steps in case 
+anyone would find this way useful.
+<br><br>
+<h3>Why use qemu?</h3>
+<br>
+The main advantage is that you don't need to restart your physical machine every time your system crashes. What's
+ more, by redirecting output, you can easily see every line of printk from your local console window even if the system
+ crashes before starting up. Also, you can make use of various functions qemu provide to speed up your debugging. 
+The only disadvantage is that qemu is not 100% compatable with all physical machines. Systems running well in qemu
+ may still crash in a physical machine.
+<br><br>
+<h3>The steps</h3>
+<br>
+<ol>
+<li>
+Create a qemu image and install domain 0 (debian jessie in my case). Leave enough space. You'll install guest domains 
+later!
+</li>
+<li>
+Install the xen version you want to modify from source code, you can google "compile xen from source" for help.
+(xen 4.5.1 in my case). Make sure you can start dom0 without hypervisor in the config of grub.
+</li>
+<li>
+Modify kernel parameters for hypervisor and dom0 in grub configuration file so that you can redirect the output to
+the console window running qemu. I'm a lazy person so google it yourself.
+</li>
+<li>
+Install the correct version of xen-tools from source code. You can refer to my blog about xen-tools if you get any
+trouble.
+</li>
+<li>
+Install a guest with xen-tools. You can find an example in xen beginners guide.(in my case a debian jessie pv guest,
+using files in dom0 as disks)
+</li>
+<li>
+If you want a guest with network, configure it in dom0.(I didn't try this)
+</li>
+<li>
+If you only need a running guest without networking, simply remove all entries in the config file(/etc/xen/xxx.cfg
+ by default) or you'll get a error about lacking xenbr0
+</li>
+<li>
+Run the guest. See whether you succeded.(yes in my case)
+</li>
+<li>
+Every time you modify any part and want to test, cd into that sub-dir, run "make;sudo make install", and this part
+in the system will be replaced with your version. Keep an unmodified version in case you need to restore it.
+</li>
+
+</font>
+</td>
+</tr>
+</table>
+<br>
+<br>
+
+<a href="../index.html"><font color="black">Blog Top</font></a>
+<br>
+<br>
